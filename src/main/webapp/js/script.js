@@ -3,32 +3,43 @@ var testVGUImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA7EAAAENCAYAAA
 var docDefinition = {
 		content: []
 	}
-	
+
 $(document).ready(function() {
 	$("#pdf_btn").on("click",
 		function(event) {
+			docDefinition.content=[];
+
+			var myText = document.getElementById("myText").innerText	;
+			parseFromHTMLText(myText);
+			
 			var myTableJSONobject = document.getElementById("myTable");
-			parseFromHTML(myTableJSONobject);
+			parseFromHTMLTable(myTableJSONobject);
+			
 			var iMaGe = document.getElementById("image");
 			parseFromHTMLImage(iMaGe);
+			
 			pdfMake.createPdf(docDefinition).open();
 		});
 });
+
+function parseFromHTMLText(text) {
+	docDefinition.content.push(text); 
+}
 
 function parseFromHTMLImage(myImagePath) {
 	var myCanvas = document.createElement("CANVAS");
 	var canvasFrame = myCanvas.getContext("2d");
 	var img = document.getElementById("LogoVGU");
-	canvasFrame.drawImage(img,5,5);
+	canvasFrame.drawImage(img,0,0,300,300*img.height/img.width);
 	
-	var sampleImage = {};
+	var	 sampleImage = {};
 	docDefinition.content.push(sampleImage);
 	var image = myCanvas.toDataURL();
 	sampleImage["image"] = image;
 	
 }
 
-function parseFromHTML(myTableJSONobject) {
+function parseFromHTMLTable(myTableJSONobject) {
 	var myRows = document.getElementById("myTable").rows;
 	var myCells = document.getElementById("myTable").rows[0].cells;
 	var myTable = {};
